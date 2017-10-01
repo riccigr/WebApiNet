@@ -11,11 +11,26 @@ namespace WebApi.Controllers
 {
     public class CarrinhoController : ApiController
     {
-        public Carrinho Get(long id)
+        public HttpResponseMessage Get(long id)
         {
-            CarrinhoDAO dao = new CarrinhoDAO();
-            Carrinho carrinho = dao.Busca(id);
-            return carrinho;
+            try
+            {
+                CarrinhoDAO dao = new CarrinhoDAO();
+                Carrinho carrinho = dao.Busca(id);
+                return  Request.CreateResponse(HttpStatusCode.OK, carrinho);
+            }
+            catch (KeyNotFoundException ex)
+            {
+                string messagem = string.Format("O carrinho {0} nao foi encontrado.", id);
+                HttpError error = new HttpError(messagem);
+                return Request.CreateResponse(HttpStatusCode.NotFound, error);
+            }
+            catch (Exception ex)
+            {
+                string messagem = string.Format("Tivemos um problema. Contate o time de suporte");
+                HttpError error = new HttpError(messagem);
+                return Request.CreateResponse(HttpStatusCode.NotFound, error);
+            }
         }
 
         public HttpResponseMessage Post([FromBody]Carrinho carrinho)
