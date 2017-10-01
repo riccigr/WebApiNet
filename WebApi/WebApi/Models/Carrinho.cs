@@ -40,6 +40,8 @@ namespace LojaWebApi.Models
         {
             this.Endereco = endereco;
         }
+
+        //-- usando para entender como serializar manualmente
         public string ToXml()
         {
             XmlSerializer xmlSerializer = new XmlSerializer(typeof(Carrinho));
